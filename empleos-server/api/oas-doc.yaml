@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: empleo
+  description: numero de empleos 
+
+paths:
+  /api/v1/empleos:
+    x-router-controller: empleoController
+    get:
+      description: Returns all empleos
+      operationId: getEmpleos
+      responses:
+        200:
+          description: Empleo list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/empleo'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    
+  /api/v1/empleos/{year}:
+    x-router-controller: empleoController
+    get:
+      description: Returns a single empleo by its year
+      operationId: findByyear
+      parameters:
+        - required: true
+          name: year
+          description: year of the empleo to fetch
+          in: path
+          schema:
+            type: number
+      responses:
+        200:
+          description: Empleo found by year
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/empleo'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    
+    
+
+components:
+  schemas:
+    empleo:
+        type: object
+        required:
+          - year
+        properties:
+          year:
+            type: number
+          period:
+            type: string
+          date:
+            type: string
+          region:
+            type: string
+          employed_person:
+            type: number
+          inactive_person:
+            type: number
+          unemployed_person:
+            type: number
+    error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+      additionalProperties: true
